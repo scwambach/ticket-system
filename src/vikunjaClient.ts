@@ -65,10 +65,13 @@ export async function createVikunjaTask(
 }
 
 /**
- * Returns the not-done tasks sitting in the project's "To-Do" Kanban bucket
- * (bucket name configurable via TODO_BUCKET_NAME).
+ * Returns the not-done tasks sitting in the project's "To-Do" and "Doing"
+ * Kanban buckets (bucket names configurable via TODO_BUCKET_NAME /
+ * DOING_BUCKET_NAME).
  */
-export async function getTodoBucketTasks(config: Config): Promise<TodoItem[]> {
+export async function getKanbanTasks(
+  config: Config,
+): Promise<{ todo: TodoItem[]; doing: TodoItem[] }> {
   const views = await vikunjaFetch<VikunjaView[]>(
     config,
     `/projects/${config.vikunjaProjectId}/views`,
@@ -87,16 +90,20 @@ export async function getTodoBucketTasks(config: Config): Promise<TodoItem[]> {
     `/projects/${config.vikunjaProjectId}/views/${kanbanView.id}/tasks`,
   );
 
-  const todoBucket = buckets.find(
-    (bucket) =>
-      bucket.title.trim().toLowerCase() ===
-      config.todoBucketName.trim().toLowerCase(),
-  );
-  if (!todoBucket) {
-    throw new Error(`No bucket named "${config.todoBucketName}" was found.`);
-  }
+  const findBucketTasks = (bucketName: string): TodoItem[] => {
+    const bucket = buckets.find(
+      (b) => b.title.trim().toLowerCase() === bucketName.trim().toLowerCase(),
+    );
+    if (!bucket) {
+      throw new Error(`No bucket named "${bucketName}" was found.`);
+    }
+    return (bucket.tasks ?? [])
+      .filter((task) => !task.done)
+      .map((task) => ({ id: task.id, title: task.title }));
+  };
 
-  return (todoBucket.tasks ?? [])
-    .filter((task) => !task.done)
-    .map((task) => ({ id: task.id, title: task.title }));
+  return {
+    todo: findBucketTasks(config.todoBucketName),
+    doing: findBucketTasks(config.doingBucketName),
+  };
 }

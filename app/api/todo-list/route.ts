@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { loadConfig } from "@/src/config";
-import { getTodoBucketTasks } from "@/src/vikunjaClient";
+import { getKanbanTasks } from "@/src/vikunjaClient";
 
 // Always fetch live data — never statically prerendered at build time.
 export const dynamic = "force-dynamic";
@@ -8,8 +8,8 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   try {
     const config = loadConfig();
-    const tasks = await getTodoBucketTasks(config);
-    return NextResponse.json({ tasks });
+    const { todo, doing } = await getKanbanTasks(config);
+    return NextResponse.json({ todo, doing });
   } catch (err) {
     console.error("todo-list route failed:", err);
     return NextResponse.json(

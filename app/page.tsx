@@ -15,6 +15,7 @@ export default function Home() {
   const [message, setMessage] = useState("");
   const [showTodos, setShowTodos] = useState(false);
   const [todos, setTodos] = useState<TodoItem[]>([]);
+  const [doing, setDoing] = useState<TodoItem[]>([]);
   const [todosLoading, setTodosLoading] = useState(false);
   const [todosError, setTodosError] = useState("");
 
@@ -67,7 +68,8 @@ export default function Home() {
       if (!response.ok) {
         throw new Error(body.error || `Request failed (${response.status})`);
       }
-      setTodos(body.tasks);
+      setTodos(body.todo);
+      setDoing(body.doing);
     } catch (err) {
       setTodosError(
         err instanceof Error
@@ -155,7 +157,7 @@ export default function Home() {
         }`}
       >
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="-rotate-1 inline-block border-4 border-black bg-brutal-pink px-3 py-1 text-xl font-black uppercase shadow-brutal-sm">
+          <h2 className="-rotate-1 inline-block border-4 border-black bg-brutal-yellow px-3 py-1 text-xl font-black uppercase shadow-brutal-sm">
             Scott's List
           </h2>
           <button
@@ -195,6 +197,31 @@ export default function Home() {
               </li>
             ))}
           </ul>
+        )}
+
+        {!todosLoading && !todosError && (
+          <>
+            <h3 className="mb-3 mt-8 -rotate-1 inline-block border-4 border-black bg-brutal-yellow px-3 py-1 text-lg font-black uppercase shadow-brutal-sm">
+              Currently "Doing" <small className="text-sm">(Allegedly)</small>
+            </h3>
+
+            {doing.length === 0 ? (
+              <p className="text-center font-bold uppercase">
+                Nothing in progress. Shocking.
+              </p>
+            ) : (
+              <ul className="flex flex-col gap-3">
+                {doing.map((task) => (
+                  <li
+                    key={task.id}
+                    className="border-4 border-black bg-green-400 px-3 py-2 font-bold uppercase shadow-brutal-sm"
+                  >
+                    {task.title}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </>
         )}
       </aside>
     </main>
