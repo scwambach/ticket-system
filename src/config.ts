@@ -7,6 +7,7 @@ export interface Config {
   smtpUser: string;
   smtpPass: string;
   notifyEmailTo: string;
+  todoBucketName: string;
 }
 
 function requireEnv(name: string): string {
@@ -27,5 +28,6 @@ export function loadConfig(): Config {
     smtpUser: requireEnv("SMTP_USER"),
     smtpPass: requireEnv("SMTP_PASS"),
     notifyEmailTo: requireEnv("NOTIFY_EMAIL_TO"),
+    todoBucketName: process.env.TODO_BUCKET_NAME || "To-Do",
   };
 }
