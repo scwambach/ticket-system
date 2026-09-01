@@ -1,11 +1,18 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { loadConfig } from "@/src/config";
+import { FORM_ACCESS_COOKIE, hasFormAccess } from "@/src/formAuth";
 import { createVikunjaTask } from "@/src/vikunjaClient";
 import { sendTicketNotification } from "@/src/mailer";
 
 const MAX_TITLE_LENGTH = 250;
 
 export async function POST(request: Request) {
+  const accessToken = cookies().get(FORM_ACCESS_COOKIE)?.value;
+  if (!hasFormAccess(accessToken)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   let payload: { text?: unknown; description?: unknown; dueDate?: unknown };
   try {
     payload = await request.json();
