@@ -7,6 +7,7 @@ type Status = "idle" | "sending" | "success" | "error";
 interface TodoItem {
   id: number;
   title: string;
+  dueDate?: string;
 }
 
 export default function Home() {
@@ -225,7 +226,12 @@ export default function Home() {
                   key={todo.id}
                   className="border-4 border-black bg-brutal-pink px-3 py-2 font-bold uppercase shadow-brutal-sm"
                 >
-                  {todo.title}
+                  <p>{todo.title}</p>
+                  {todo.dueDate && (
+                    <p className="mt-1 text-xs text-black/70">
+                      Due {new Date(todo.dueDate).toLocaleDateString()}
+                    </p>
+                  )}
                 </li>
               ))}
             </ul>
@@ -248,7 +254,12 @@ export default function Home() {
                       key={task.id}
                       className="border-4 border-black bg-green-400 px-3 py-2 font-bold uppercase shadow-brutal-sm"
                     >
-                      {task.title}
+                      <p>{task.title}</p>
+                      {task.dueDate && (
+                        <p className="mt-1 text-xs text-black/70">
+                          Due {new Date(task.dueDate).toLocaleDateString()}
+                        </p>
+                      )}
                     </li>
                   ))}
                 </ul>

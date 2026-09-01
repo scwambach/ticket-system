@@ -10,6 +10,7 @@ export interface CreateTaskInput {
 export interface TodoItem {
   id: number;
   title: string;
+  dueDate?: string;
 }
 
 interface VikunjaView {
@@ -19,7 +20,12 @@ interface VikunjaView {
 
 interface VikunjaBucket {
   title: string;
-  tasks: { id: number; title: string; done: boolean }[];
+  tasks: {
+    id: number;
+    title: string;
+    done: boolean;
+    due_date?: string | null;
+  }[];
 }
 
 async function vikunjaFetch<T>(config: Config, path: string): Promise<T> {
@@ -101,7 +107,13 @@ export async function getKanbanTasks(
     }
     return (bucket.tasks ?? [])
       .filter((task) => !task.done)
-      .map((task) => ({ id: task.id, title: task.title }));
+      .map((task) => ({
+        id: task.id,
+        title: task.title,
+        dueDate: task.due_date?.startsWith("0001-01-01")
+          ? undefined
+          : task.due_date || undefined,
+      }));
   };
 
   return {
