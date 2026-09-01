@@ -105,7 +105,7 @@ export async function getKanbanTasks(
     if (!bucket) {
       throw new Error(`No bucket named "${bucketName}" was found.`);
     }
-    return (bucket.tasks ?? [])
+    const tasks = (bucket.tasks ?? [])
       .filter((task) => !task.done)
       .map((task) => ({
         id: task.id,
@@ -114,6 +114,17 @@ export async function getKanbanTasks(
           ? undefined
           : task.due_date || undefined,
       }));
+
+    return tasks.sort((firstTask, secondTask) => {
+      if (firstTask.dueDate && secondTask.dueDate) {
+        return firstTask.dueDate.localeCompare(secondTask.dueDate);
+      }
+      if (firstTask.dueDate) return -1;
+      if (secondTask.dueDate) return 1;
+      return firstTask.title.localeCompare(secondTask.title, undefined, {
+        sensitivity: "base",
+      });
+    });
   };
 
   return {
