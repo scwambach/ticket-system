@@ -6,23 +6,39 @@ import { sendTicketNotification } from "@/src/mailer";
 const MAX_TITLE_LENGTH = 250;
 
 export async function POST(request: Request) {
-  let text: unknown;
+  let payload: { text?: unknown; description?: unknown; dueDate?: unknown };
   try {
-    text = (await request.json()).text;
+    payload = await request.json();
   } catch {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
+
+  const { text, description, dueDate } = payload;
 
   if (typeof text !== "string" || !text.trim()) {
     return NextResponse.json({ error: "'text' is required" }, { status: 400 });
   }
 
   const trimmed = text.trim();
+  if (typeof description !== "undefined" && typeof description !== "string") {
+    return NextResponse.json(
+      { error: "'description' must be a string" },
+      { status: 400 },
+    );
+  }
+  if (typeof dueDate !== "undefined" && typeof dueDate !== "string") {
+    return NextResponse.json(
+      { error: "'dueDate' must be a date string" },
+      { status: 400 },
+    );
+  }
 
   try {
     const config = loadConfig();
     await createVikunjaTask(config, {
       title: trimmed.slice(0, MAX_TITLE_LENGTH),
+      description: description?.trim() || undefined,
+      dueDate: dueDate || undefined,
     });
 
     try {

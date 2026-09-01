@@ -4,6 +4,7 @@ import { Config } from "./config";
 export interface CreateTaskInput {
   title: string;
   description?: string;
+  dueDate?: string;
 }
 
 export interface TodoItem {
@@ -53,6 +54,7 @@ export async function createVikunjaTask(
     body: JSON.stringify({
       title: input.title,
       description: input.description,
+      due_date: input.dueDate ? `${input.dueDate}T00:00:00Z` : undefined,
     }),
   });
 
