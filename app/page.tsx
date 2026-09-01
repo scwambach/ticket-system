@@ -170,7 +170,7 @@ export default function Home() {
       <button
         type="button"
         onClick={toggleTodos}
-        className="w-full max-w-xl -rotate-1 border-4 border-black bg-brutal-yellow px-4 py-3 text-lg font-black uppercase shadow-brutal-sm transition-all hover:-translate-x-1 hover:-translate-y-1 hover:shadow-brutal active:translate-x-0 active:translate-y-0 active:shadow-none"
+        className="w-full max-w-xl -rotate-1 border-4 border-black bg-brutal-pink px-4 py-3 text-lg font-black uppercase shadow-brutal-sm transition-all hover:-translate-x-1 hover:-translate-y-1 hover:shadow-brutal active:translate-x-0 active:translate-y-0 active:shadow-none"
       >
         SEE WHAT SCOTT STILL HASN'T DONE
       </button>
