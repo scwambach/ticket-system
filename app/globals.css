@@ -2,10 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  color-scheme: light;
+}
+
+html,
 body {
+  margin: 0;
+  min-height: 100%;
   background-color: #fef200;
+}
+
+body {
+  min-height: 100svh;
   background-image: radial-gradient(#000 1.5px, transparent 1.5px);
   background-size: 24px 24px;
+  padding-top: max(1rem, env(safe-area-inset-top));
+  padding-right: max(1rem, env(safe-area-inset-right));
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  padding-left: max(1rem, env(safe-area-inset-left));
+  overscroll-behavior: none;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 input[type="date"] {
