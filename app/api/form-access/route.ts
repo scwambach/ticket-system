@@ -18,13 +18,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Incorrect password" }, { status: 401 });
   }
 
+  const isSecureRequest =
+    new URL(request.url).protocol === "https:" ||
+    request.headers.get("x-forwarded-proto") === "https";
+
   const response = NextResponse.json({ ok: true });
   response.cookies.set(FORM_ACCESS_COOKIE, getFormAccessToken(), {
     httpOnly: true,
     maxAge: FORM_ACCESS_MAX_AGE,
     path: "/",
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    sameSite: isSecureRequest ? "none" : "lax",
+    secure: isSecureRequest,
   });
   return response;
 }
