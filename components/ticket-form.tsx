@@ -77,7 +77,7 @@ export function TicketForm() {
           type="date"
           value={dueDate}
           onChange={(e) => setDueDate(e.target.value)}
-          className="mt-1 block w-full border-4 border-black bg-brutal-yellow px-4 py-3 text-lg font-bold outline-none focus:shadow-brutal-sm placeholder:text-black/50"
+          className="mt-1 block w-full appearance-none border-4 border-black bg-brutal-yellow px-4 py-3 text-lg font-bold text-black outline-none focus:shadow-brutal-sm placeholder:text-black/50"
         />
       </label>
 
