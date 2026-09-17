@@ -8,7 +8,7 @@ export function TicketSystem() {
   const [showTodos, setShowTodos] = useState(false);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-6 p-6">
+    <main className="flex min-h-screen flex-col items-center justify-center gap-6 px-6">
       <div className="w-full max-w-xl rotate-1 border-4 border-black bg-red-500 px-4 py-3 text-center shadow-brutal-sm">
         <p className="text-xl font-black uppercase tracking-tight text-white">
           ⚠️ WARNING: BE AWARE THAT THIS MAKES A TASK FOR ONLY SCOTT WAMBACH ⚠️
