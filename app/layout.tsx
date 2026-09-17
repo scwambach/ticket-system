@@ -56,7 +56,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </head>
-      <body className="font-mono text-black">
+      <body className="font-mono text-black p-0">
         <PwaRegister />
         {children}
       </body>
