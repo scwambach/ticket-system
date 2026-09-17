@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { TicketSystem } from "@/components/ticket-system";
 
 export function PasswordModal() {
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [isUnlocked, setIsUnlocked] = useState(false);
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -21,12 +23,16 @@ export function PasswordModal() {
       if (!response.ok) {
         throw new Error("Incorrect password");
       }
-      window.location.reload();
+      setIsUnlocked(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {
       setIsSubmitting(false);
     }
+  }
+
+  if (isUnlocked) {
+    return <TicketSystem />;
   }
 
   return (
